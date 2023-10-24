@@ -78,6 +78,11 @@ const App = () => {
     setEdit(true)
   }
 
+  const clearItems = () => {
+    setExpenses([]);
+    handleAlert({type : "success", text : "리스트가 삭제되었습니다."})
+  }
+
   return (
     <main className="main-container">
       {alert.show ? <Alert type={alert.type} text={alert.text}/> : <Alert hide={alert.hide}/>}
@@ -98,9 +103,10 @@ const App = () => {
       <div style={{ width: '100%', backgroundColor: '#fff', padding: '1rem' }}>
         {/* 익스펜스 리스트 */}
         <ExpenseList 
-          initailExpenses = { expenses } 
+          expenses = { expenses } 
           handleDelete = { handleDelete }
           handleEdit= { handleEdit }
+          clearItems = { clearItems }
         />
       </div>
 
