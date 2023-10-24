@@ -12,6 +12,10 @@ const App = () => {
 
   const [amount, setAmount] = useState();
 
+  const [id, setId] = useState('')
+  
+  const [edit, setEdit] = useState(false)
+
   const [expenses, setExpenses ] = useState([
     { id: 1, charge: "렌트비", amount: 1600 },
     { id: 2, charge: "교통비", amount: 400 },
@@ -35,14 +39,23 @@ const App = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if(charge !== "" && amount > 0) {
-      const newExpense = {id: crypto.randomUUID(), charge, amount}
+      if (edit) {
+        const newExpenses = expenses.map(item => {
+          return item.id === id ? {...item, charge, amount} : item
+        })
 
-      //불변성을 위한 newExpenses 생성
-      const newExpenses = [...expenses, newExpense]
-      setExpenses(newExpenses)
+        setExpenses(newExpenses)
+        setEdit(false)
+        handleAlert({type: 'success', text : '아이템이 수정되었습니다.'})
+      } else {
+        const newExpense = {id: crypto.randomUUID(), charge, amount}
+        //불변성을 위한 newExpenses 생성
+        const newExpenses = [...expenses, newExpense]
+        setExpenses(newExpenses)
+        handleAlert({type : "success", text : "아이템이 생성되었습니다"})
+      }  
       setCharge("")
       setAmount("")
-      handleAlert({type : "success", text : "아이템이 생성되었습니다"})
     } else {
       console.log("erroe")
       handleAlert({type : "danger", text : "지출항목칸은 빈 값일 수 없으며 지출비용은 0 보다 커야 합니다."})
@@ -54,6 +67,15 @@ const App = () => {
     setTimeout(() => {
       setAlert({show : false})
     }, 7000);
+  }
+
+  const handleEdit = (id) => {
+    const expense = expenses.find(item => item.id === id);
+    const { charge, amount } = expense;
+    setId(id);
+    setCharge(charge)
+    setAmount(amount)
+    setEdit(true)
   }
 
   return (
@@ -69,6 +91,7 @@ const App = () => {
           handleAmount = {handleAmount}
           amount = {amount}
           handleSubmit = {handleSubmit}
+          edit = {edit}
         />
       </div>
 
@@ -77,13 +100,18 @@ const App = () => {
         <ExpenseList 
           initailExpenses = { expenses } 
           handleDelete = { handleDelete }
+          handleEdit= { handleEdit }
         />
       </div>
 
       <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '1rem' }}>
         <p style={{ fontSize: '2rem'}}>
           총 지출 : 
-          <span> 원</span>
+          <span>
+            {expenses.reduce((acc, curr) => {
+              return (acc += curr.amount)
+            }, 0)}
+            원</span>
         </p>
       </div>
 
