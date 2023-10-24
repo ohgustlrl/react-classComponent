@@ -2,9 +2,9 @@ import React from 'react'
 import { MdSend } from 'react-icons/md'
 import "./ExpenseForm.css"
 
-const ExpenseForm = () => {
+const ExpenseForm = ({charge, handleCharge, amount, handleAmount, handleSubmit}) => {
   return (
-    <form>
+    <form onSubmit={handleSubmit}>
       <div className='form-center'>
         <div className='form-group'>
           <label htmlFor='charge'>지출 항목</label>
@@ -13,7 +13,9 @@ const ExpenseForm = () => {
             className='form-control'
             id="charge"
             name="charge"
-            placeholder='예) 렌트비' 
+            placeholder='예) 렌트비'
+            value={charge}
+            onChange={handleCharge}
           />
         </div>
         <div className='form-group'>
@@ -24,6 +26,8 @@ const ExpenseForm = () => {
             id="amount"
             name="amount"
             placeholder='예) 100' 
+            value={amount}
+            onChange={handleAmount}
           />
         </div>
       </div>

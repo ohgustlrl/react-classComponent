@@ -4,8 +4,6 @@ import "./ExpenseList.css"
 import { MdDelete } from 'react-icons/md'
 
 const ExpenseList = ({handleDelete, initailExpenses}) => {
-
-  console.log(initailExpenses)
   
   return (
     <React.Fragment>
